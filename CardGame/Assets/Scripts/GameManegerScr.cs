@@ -68,19 +68,7 @@ public class GameManegerScr : MonoBehaviour
 
     void Start()
     {
-        Turn = 0;
-
-
-        Currentgame = new Game();
-
-        GiveHandCards(Currentgame.EnemyDeck, EnemyHand);
-        GiveHandCards(Currentgame.PlayerDeck, PlayerHand);
-
-        PlayerHP = EnemyHP = 30;
-
-        ShowMana();
-
-         StartCoroutine(TurnFunc());
+        StartGame();
     }
 
     void GiveHandCards(List<Card> deck, Transform hand)
@@ -93,6 +81,51 @@ public class GameManegerScr : MonoBehaviour
         while (i++ < 4)
             GiveCardsToHand(deck, hand);
     }
+
+
+    public void RestartGame()
+    {
+        StopAllCoroutines();
+
+        foreach(var card in PlayerHandCards) 
+            Destroy(card.gameObject);
+        foreach (var card in PlayerFieldCards)
+            Destroy(card.gameObject);
+        foreach (var card in EnemyFieldCards)
+            Destroy(card.gameObject);
+        foreach (var card in EnemyFieldCards)
+            Destroy(card.gameObject);
+
+        PlayerHandCards.Clear();
+        EnemyFieldCards.Clear();
+        PlayerFieldCards.Clear();
+        EnemyFieldCards.Clear();
+
+
+        StartGame();
+    }
+
+    public void StartGame()
+    {
+        Turn = 0;
+        EndTimeBtn.interactable = true; 
+
+        Currentgame = new Game();
+
+        GiveHandCards(Currentgame.EnemyDeck, EnemyHand);
+        GiveHandCards(Currentgame.PlayerDeck, PlayerHand);
+
+        PlayerMana = EnemyMana = 10;
+        PlayerHP = EnemyHP = 30;
+
+        ShowHP();
+        ShowMana();
+
+        ResultGO.SetActive(false);
+
+        StartCoroutine(TurnFunc());
+    }
+
 
 
     void GiveCardsToHand(List<Card> deck, Transform hand)
@@ -166,7 +199,7 @@ public class GameManegerScr : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             if (EnemyFieldCards.Count > 5)
-                return;
+                break;
 
             List<CardInfoScr> cardList = cards.FindAll(x => EnemyMana >= x.SelfCard.Manacost);
 
@@ -317,7 +350,7 @@ public class GameManegerScr : MonoBehaviour
             if (EnemyHP == 0)
                 ResultTxt.text = "Win GG EZ GRATZ";
             else
-                ResultTxt.text = "Team noobs, againe - 25";
+                ResultTxt.text = "Againe - 25";
         }
 
     }

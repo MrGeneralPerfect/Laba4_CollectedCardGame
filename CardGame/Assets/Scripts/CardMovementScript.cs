@@ -1,7 +1,8 @@
- using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+
 public class CardMovementsScr : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     Camera MainCamera;
@@ -27,9 +28,18 @@ public class CardMovementsScr : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 
         DefaultParent = DefaultTempCardParent = transform.parent;
 
-        IsGraddble = (DefaultParent.GetComponent<DropPlayScr>().Type == FieldType.SELF_HAND || 
-                     DefaultParent.GetComponent<DropPlayScr>().Type == FieldType.SELF_FIELD) &&
-                     GameManeger.isActiveAndEnabled;
+        IsGraddble = GameManeger.IsPlayerTurn &&
+            (
+            (DefaultParent.GetComponent<DropPlayScr>().Type == FieldType.SELF_HAND &&
+            GameManeger.PlayerMana >= GetComponent<CardInfoScr>().SelfCard.Manacost) ||
+            (DefaultParent.GetComponent<DropPlayScr>().Type == FieldType.SELF_FIELD &&
+            GetComponent<CardInfoScr>().SelfCard.CanAttack)
+            );
+            
+            
+            //(DefaultParent.GetComponent<DropPlayScr>().Type == FieldType.SELF_HAND || 
+        //             DefaultParent.GetComponent<DropPlayScr>().Type == FieldType.SELF_FIELD) &&
+        //             GameManeger.isActiveAndEnabled;
 
         if (!IsGraddble)
             return;
