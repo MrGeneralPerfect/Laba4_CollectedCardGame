@@ -87,19 +87,19 @@ public class GameManegerScr : MonoBehaviour
     {
         StopAllCoroutines();
 
-        foreach(var card in PlayerHandCards) 
+        foreach (var card in PlayerHandCards)
             Destroy(card.gameObject);
         foreach (var card in PlayerFieldCards)
             Destroy(card.gameObject);
         foreach (var card in EnemyFieldCards)
             Destroy(card.gameObject);
-        foreach (var card in EnemyFieldCards)
+        foreach (var card in EnemyHandCards)
             Destroy(card.gameObject);
 
         PlayerHandCards.Clear();
         EnemyFieldCards.Clear();
         PlayerFieldCards.Clear();
-        EnemyFieldCards.Clear();
+        EnemyHandCards.Clear();
 
 
         StartGame();
